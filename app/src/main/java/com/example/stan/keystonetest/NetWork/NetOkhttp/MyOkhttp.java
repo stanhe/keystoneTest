@@ -1,5 +1,7 @@
 package com.example.stan.keystonetest.NetWork.NetOkhttp;
 
+import android.util.Log;
+
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
@@ -20,12 +22,13 @@ public enum MyOkhttp {
         void handleResult(String data);
         void handleError(Exception error);
     }
-    public void getData(String url, final OnResult result){
+    public void getData(String url,String name,String password ,String type, final OnResult result){
         if (mOkHttpClient==null)
             mOkHttpClient = new OkHttpClient();
         FormEncodingBuilder builder = new FormEncodingBuilder();
-        builder.add("name","stan2");
-        builder.add("type","action2");
+        builder.add("name",name);
+        builder.add("password",password);
+        builder.add("type",type);
         final Request request = new Request.Builder().url(url).post(builder.build()).build();
         Call call = mOkHttpClient.newCall(request);
         call.enqueue(new Callback() {
@@ -36,7 +39,8 @@ public enum MyOkhttp {
 
             @Override
             public void onResponse(Response response) throws IOException {
-                String data = response.body().toString();
+                String data = response.body().string();
+                Log.e("ST","data: "+data);
                 result.handleResult(data);
             }
         });

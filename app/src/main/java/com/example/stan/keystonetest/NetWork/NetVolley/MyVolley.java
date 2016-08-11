@@ -25,7 +25,7 @@ public enum  MyVolley {
        void handleResult(String data);
         void handleError(VolleyError error);
     }
-    public void getString(Context context, String url, final OnResult result){
+    public void getString(Context context, String url, final String name, final String password, final String type, final OnResult result){
         if (mQueue==null)
             mQueue = Volley.newRequestQueue(context.getApplicationContext());
         StringRequest stringRequest = new StringRequest(Request.Method.POST,url,
@@ -45,8 +45,9 @@ public enum  MyVolley {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> map = new HashMap<>();
-                map.put("name","stan1");
-                map.put("type","action1");
+                map.put("name",name);
+                map.put("password",password);
+                map.put("type",type);
                 return map;
             }
         };

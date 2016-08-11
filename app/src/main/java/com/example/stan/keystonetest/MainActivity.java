@@ -26,15 +26,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (textView.getText().equals(""))
-//                    getDataVolley();
-                        getDataOkhttp();
+                    getDataOkhttp(url,"ray","110","login");
                 else
                     textView.setText("");
             }
         });
     }
-    private void getDataVolley(){
-        MyVolley.INSTANCE.getString(this, url, new MyVolley.OnResult() {
+    private void getDataVolley(String url,String name,String password ,String type){
+        MyVolley.INSTANCE.getString(this, url,name,password,type, new MyVolley.OnResult() {
             @Override
             public void handleResult(String data) {
                 textView.setText(data);
@@ -46,8 +45,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    private void getDataOkhttp(){
-        MyOkhttp.INSTANCE.getData(url, new MyOkhttp.OnResult() {
+    private void getDataOkhttp(String url,String name,String password ,String type){
+        MyOkhttp.INSTANCE.getData(url, name, password , type, new MyOkhttp.OnResult() {
             @Override
             public void handleResult(final String data) {
                 textView.post(new Runnable() {
