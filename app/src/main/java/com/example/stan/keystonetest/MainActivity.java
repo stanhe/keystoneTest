@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -12,7 +13,9 @@ import com.example.stan.keystonetest.NetWork.NetVolley.MyVolley;
 
 
 public class MainActivity extends AppCompatActivity {
-
+    EditText editText0;
+    EditText editText1;
+    EditText editText2;
     TextView textView;
     Button button;
     String url = "http://192.168.1.11:3000/api";
@@ -21,12 +24,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         textView = (TextView) findViewById(R.id.text);
+        editText0 = (EditText) findViewById(R.id.editText0);
+        editText1 = (EditText) findViewById(R.id.editText1);
+        editText2 = (EditText) findViewById(R.id.editText2);
         button = (Button) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (textView.getText().equals(""))
-                    getDataOkhttp(url,"ray","110","login");
+                    getDataOkhttp(url,editText0.getText().toString(),editText1.getText().toString(),editText2.getText().toString());
                 else
                     textView.setText("");
             }
