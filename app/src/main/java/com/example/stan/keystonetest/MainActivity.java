@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.example.stan.keystonetest.NetWork.NetOkhttp.MyOkhttp;
 import com.example.stan.keystonetest.NetWork.NetVolley.MyVolley;
+import com.example.stan.keystonetest.Utils.AESUtils;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -17,17 +18,21 @@ public class MainActivity extends AppCompatActivity {
     EditText editText1;
     EditText editText2;
     TextView textView;
+    TextView textView1;
     Button button;
+    Button button1;
     String url = "http://192.168.1.11:3000/api";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         textView = (TextView) findViewById(R.id.text);
+        textView1 = (TextView) findViewById(R.id.text1);
         editText0 = (EditText) findViewById(R.id.editText0);
         editText1 = (EditText) findViewById(R.id.editText1);
         editText2 = (EditText) findViewById(R.id.editText2);
         button = (Button) findViewById(R.id.button);
+        button1 = (Button) findViewById(R.id.button1);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -35,6 +40,16 @@ public class MainActivity extends AppCompatActivity {
                     getDataOkhttp(url,editText0.getText().toString(),editText1.getText().toString(),editText2.getText().toString());
                 else
                     textView.setText("");
+            }
+        });
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (textView1.getText().equals("")){
+                    textView1.setText(AESUtils.decryptData(textView.getText().toString()));
+                }else {
+                    textView1.setText("");
+                }
             }
         });
     }

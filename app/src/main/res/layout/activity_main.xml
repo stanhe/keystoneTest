@@ -36,14 +36,36 @@
         android:layout_below="@+id/llEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:hint="data"
         android:textSize="12sp"
         android:id="@+id/text" />
+    <View
+        android:id="@+id/view"
+        android:layout_below="@+id/text"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#444444"/>
+    <TextView
+
+        android:layout_below="@+id/view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="decrypto"
+        android:textSize="12sp"
+        android:id="@+id/text1" />
     <Button
         android:text="getData"
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"/>
+    <Button
+        android:text="decrypto"
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@id/button"
         android:layout_centerHorizontal="true"/>
 </RelativeLayout>
