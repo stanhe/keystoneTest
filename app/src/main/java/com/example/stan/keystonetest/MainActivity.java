@@ -1,5 +1,6 @@
 package com.example.stan.keystonetest;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -17,6 +18,8 @@ public class MainActivity extends AppCompatActivity {
     EditText editText0;
     EditText editText1;
     EditText editText2;
+    EditText editText3;
+    EditText editText4;
     TextView textView;
     TextView textView1;
     Button button;
@@ -31,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
         editText0 = (EditText) findViewById(R.id.editText0);
         editText1 = (EditText) findViewById(R.id.editText1);
         editText2 = (EditText) findViewById(R.id.editText2);
+        editText3 = (EditText) findViewById(R.id.editText3);
+        editText4 = (EditText) findViewById(R.id.editText4);
         button = (Button) findViewById(R.id.button);
         button1 = (Button) findViewById(R.id.button1);
         button.setOnClickListener(new View.OnClickListener() {
@@ -46,7 +51,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (textView1.getText().equals("")){
-                    textView1.setText(AESUtils.decryptData(textView.getText().toString()));
+//                    textView1.setText(AESUtils.decryptData(textView.getText().toString()));
+                        textView1.setText(AESUtils.decryptData(textView.getText().toString(), editText3.getText().toString(),editText4.getText().toString()));
                 }else {
                     textView1.setText("");
                 }

@@ -1,5 +1,6 @@
 package com.example.stan.keystonetest.Utils;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import org.json.JSONObject;
@@ -25,7 +26,7 @@ import javax.crypto.spec.SecretKeySpec;
  * Created by stan on 16/8/12.
  */
 public class AESUtils {
-    public static String decryptData(String data){
+    public static String decryptData(String data,String type,String hexString){
         try {
         String[] dataArray = new String[2];
         JSONObject object = new JSONObject(data);
@@ -35,9 +36,17 @@ public class AESUtils {
         String seed = dataArray[1];
         Log.e("ST","crypted Data : "+cryptedData);
         Log.e("ST","crypted seed : "+seed);
+         Boolean hex;
+            if (TextUtils.isEmpty(hexString))
+                hex = false;
+            else
+                hex = true;
 
-
-
+        if (type.equals("256") ){
+           data = getSHA256(seed,hex);
+        }else if (type.equals("512") ){
+           data =  getSHA512(seed,hex);
+        }
 
 
 //        byte[] backByte = decrypt(cryptedData.getBytes("ISO-8859-1"),"qwertyuiopasdfghqwertyuiopasdfgh".getBytes("ISO-8859-1"),"qwertyuiopasdfgh".getBytes("ISO-8859-1"));
@@ -48,6 +57,42 @@ public class AESUtils {
         return data;
     }
 
+
+    public static String getSHA256(String val,boolean hex) throws NoSuchAlgorithmException {
+        MessageDigest md5 = MessageDigest.getInstance("SHA-256");
+        md5.update(val.getBytes());
+        byte[] m = md5.digest();//加密
+        if (hex)
+            return hexString(m);
+        return getString(m);
+    }
+    public static String getSHA512(String val,boolean hex) throws NoSuchAlgorithmException {
+        MessageDigest md5 = MessageDigest.getInstance("SHA-512");
+        md5.update(val.getBytes());
+        byte[] m = md5.digest();//加密
+        if (hex){
+            return hexString(m);
+        }
+        return getString(m);
+    }
+    public static String hexString(byte[] bytes){
+        StringBuffer hexValue = new StringBuffer();
+
+        for (int i = 0; i < bytes.length; i++) {
+            int val = ((int) bytes[i]) & 0xff;
+            if (val < 16)
+                hexValue.append("0");
+            hexValue.append(Integer.toHexString(val));
+        }
+        return hexValue.toString();
+    }
+    private static String getString(byte[] b){
+        StringBuffer sb = new StringBuffer();
+        for(int i = 0; i < b.length; i ++){
+            sb.append(b[i]);
+        }
+        return sb.toString();
+    }
 
 
 

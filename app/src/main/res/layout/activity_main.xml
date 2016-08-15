@@ -12,7 +12,7 @@
         android:id="@+id/llEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal">
     <EditText
         android:id="@+id/editText0"
         android:layout_width="wrap_content"
@@ -32,8 +32,25 @@
         android:hint="type"
         />
     </LinearLayout>
-    <TextView
+    <LinearLayout
         android:layout_below="@+id/llEdit"
+        android:id="@+id/lledit1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/editText3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="encryptoType"/>
+        <EditText
+            android:id="@+id/editText4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="hexString"/>
+    </LinearLayout>
+    <TextView
+        android:layout_below="@+id/lledit1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="data"
