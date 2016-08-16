@@ -3,8 +3,10 @@ netTest for okhttp\volley\retrofit
 
 ### Android 
 this is a android app used the keystoneTest_server as server
-###* Feature
-
+### Feature
 1. netWOrk	use defferent network	volley 、okhttp 、 retrofit
 
 2. AESCrypto implement AESCrypto android, encrypt data.
+
+### Effect
+![stan](http://oanvj2lsv.bkt.clouddn.com/keystoneTest.png)
