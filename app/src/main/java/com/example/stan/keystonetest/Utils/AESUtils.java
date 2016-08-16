@@ -1,56 +1,95 @@
 package com.example.stan.keystonetest.Utils;
 
-import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
-
+import com.scottyab.aescrypt.AESCrypt;
 import org.json.JSONObject;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.SecureRandom;
-
-import javax.crypto.Cipher;
-import javax.crypto.CipherOutputStream;
-import javax.crypto.KeyGenerator;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
  * Created by stan on 16/8/12.
  */
 public class AESUtils {
-    public static String decryptData(String data,String type,String hexString){
+
+    public static final int ENCRYPT = 0;
+    public static final int DECRYPT = 1;
+
+    public static String handleCryptData(String data,int type){
         try {
-        String[] dataArray = new String[2];
+        String[] dataArray;
         JSONObject object = new JSONObject(data);
         data = object.getString("data");
         dataArray = data.split(",");
-        String  cryptedData = dataArray[0];
+        String  cryptoData = dataArray[0];
         String seed = dataArray[1];
-        Log.e("ST","crypted Data : "+cryptedData);
-        Log.e("ST","crypted seed : "+seed);
-         Boolean hex;
-            if (TextUtils.isEmpty(hexString))
-                hex = false;
-            else
-                hex = true;
-
-        if (type.equals("256") ){
-           data = getSHA256(seed,hex);
-        }else if (type.equals("512") ){
-           data =  getSHA512(seed,hex);
+        if (type==ENCRYPT){
+            data = encryptData(cryptoData,seed);
+        }else if (type == DECRYPT){
+            data = decryptData(cryptoData,seed);
         }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return data;
+    }
+
+    /**
+     *
+     * @param data the data used for encrypt
+     * @param key the seed for generate key
+     * @return encrypt data with key handle with 256-32 as key 512-16 as vi
+     */
+    public static String encryptData(String data,String key){
+        try {
+            String  cryptedData = data;
+            String seed = key;
+            Log.d("ST","crypto Data : "+cryptedData);
+            Log.d("ST","crypto seed : "+seed);
+            Boolean hex = true;
+
+            String data32 = getSHA256(seed,hex);
+            String data16 =  getSHA512(seed,hex);
+            SecretKeySpec secretKey = new SecretKeySpec(data32.getBytes(),"AES");
+            byte[] byteDate = AESCrypt.encrypt(secretKey,data16.getBytes(),cryptedData.getBytes()); //
+            data = Base64.encodeToString(byteDate,Base64.DEFAULT);
+
+           /* Log.e("ST","  -------*******-------");
+            Log.e("ST","  data16 : "+data16 );
+            Log.e("ST","  data32 : "+data32 );
+            Log.e("ST","  byteData : "+getString(byteDate) );
+            Log.e("ST","  AESCrypt : "+data );
+            Log.e("ST","  -------*******-------");*/
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return data;
+    }
+    public static String decryptData(String data,String key){
+        try {
+            String  cryptedData = data;
+            String seed = key;
+            Log.d("ST","crypto Data : "+cryptedData);
+            Log.d("ST","crypto seed : "+seed);
+            Boolean hex = true;
+
+            String data32 = getSHA256(seed,hex);
+            String data16 =  getSHA512(seed,hex);
+            SecretKeySpec secretKey = new SecretKeySpec(data32.getBytes(),"AES");
+            byte[] decodeData = Base64.decode(cryptedData,Base64.DEFAULT);
+            byte[] byteDate = AESCrypt.decrypt(secretKey,data16.getBytes(),decodeData);
+            data = new String(byteDate,"UTF-8");
 
 
-//        byte[] backByte = decrypt(cryptedData.getBytes("ISO-8859-1"),"qwertyuiopasdfghqwertyuiopasdfgh".getBytes("ISO-8859-1"),"qwertyuiopasdfgh".getBytes("ISO-8859-1"));
-//        data = new String(backByte,"ISO-8859-1");
+          /*  Log.e("ST","  -------*******-------");
+            Log.e("ST","  data16 : "+data16 );
+            Log.e("ST","  data32 : "+data32 );
+            Log.e("ST","  byteData : "+getString(byteDate) );
+            Log.e("ST","  AESCrypt : "+data );
+            Log.e("ST","  -------*******-------");*/
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -58,24 +97,29 @@ public class AESUtils {
     }
 
 
-    public static String getSHA256(String val,boolean hex) throws NoSuchAlgorithmException {
+    private static String subTheCode(String s,int n){
+        return s.substring(s.length()-n,s.length());
+    }
+
+    private static String getSHA256(String val,boolean hex) throws NoSuchAlgorithmException {
         MessageDigest md5 = MessageDigest.getInstance("SHA-256");
         md5.update(val.getBytes());
         byte[] m = md5.digest();//加密
         if (hex)
-            return hexString(m);
+            return subTheCode(hexString(m),32); // 64 - 32
         return getString(m);
     }
-    public static String getSHA512(String val,boolean hex) throws NoSuchAlgorithmException {
+
+    private static String getSHA512(String val,boolean hex) throws NoSuchAlgorithmException {
         MessageDigest md5 = MessageDigest.getInstance("SHA-512");
         md5.update(val.getBytes());
         byte[] m = md5.digest();//加密
         if (hex){
-            return hexString(m);
+            return subTheCode(hexString(m),16);// 128 -16
         }
         return getString(m);
     }
-    public static String hexString(byte[] bytes){
+    private static String hexString(byte[] bytes){
         StringBuffer hexValue = new StringBuffer();
 
         for (int i = 0; i < bytes.length; i++) {
@@ -92,151 +136,6 @@ public class AESUtils {
             sb.append(b[i]);
         }
         return sb.toString();
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //下面是一些常量
-    /**
-     * IV大小.
-     */
-    private static final int IV_SIZE = 16;
-
-    /**
-     * BC包中AES算法名.
-     */
-    public static final String ALGORITHM_LONG_NAME = "AES/CBC/PKCS7Padding";
-
-    /**
-     * BC包中AES算法名.
-     */
-    public static final String ALGORITHM_SHORT_NAME = "AES";
-
-    /**
-     * BC Provider名称.
-     */
-    public static final String PROVIDER_NAME = "BC";
-
-    //获得加密器的函数
-    private static Cipher generateCipher(final int mode, final byte[] key,
-                                         final byte[] ivp) throws NoSuchAlgorithmException,
-            NoSuchProviderException, NoSuchPaddingException, InvalidKeyException,
-            InvalidAlgorithmParameterException {
-        Cipher res = null;
-        final SecretKey secretkey = new SecretKeySpec(key, ALGORITHM_SHORT_NAME);
-        final IvParameterSpec ivparameter = new IvParameterSpec(ivp);
-        res = Cipher.getInstance(ALGORITHM_LONG_NAME, PROVIDER_NAME);
-        res.init(mode, secretkey, ivparameter);
-
-        return res;
-    }
-
-//java安全加密的部分对随机数又要求，普通的随机数是不行的，需要特殊处理，应该是长度、算法上有区别，而且好像存储也不一样。使用的方法如下：
-    /**
-     * 获得密钥.
-     * @return 密钥.
-     */
-    public static byte[] generateKey() {
-        byte[] res = null;
-        KeyGenerator keyGen = null;
-        SecretKey key = null;
-        try {
-            keyGen = KeyGenerator.getInstance(ALGORITHM_SHORT_NAME, PROVIDER_NAME);
-            keyGen.init(new SecureRandom());
-            key = keyGen.generateKey();
-            res = key.getEncoded();
-        } catch (NoSuchAlgorithmException e) {
-
-        } catch (NoSuchProviderException e) {
-
-        }
-        return res;
-    }
-
-//Java的cipher可以完成加密和解密两种功能，处理过程如下
-    /**
-     * 处理加密解密过程.
-     * @param input
-     *          输入.
-     * @param cipher
-     *          cipher.
-     * @return 结果.
-     */
-    private static byte[] process(final byte[] input, final Cipher cipher) {
-
-        byte[] res = null;
-        ByteArrayOutputStream bOut = new ByteArrayOutputStream();
-        CipherOutputStream cOut = new CipherOutputStream(bOut, cipher);
-
-        try {
-            cOut.write(input);
-            cOut.flush();
-            cOut.close();
-            res = bOut.toByteArray();
-        } catch (IOException e) {
-
-        }
-        return res;
-    }
-
-//加密和解密接口
-
-    /**
-     * 加密.
-     * @param data
-     *          加密的数据.
-     * @param key
-     *          密钥.
-     * @param iv
-     *          CBC算法所需初始矩阵.
-     * @return 加密结果.
-     */
-    public static byte[] encrypt(final byte[] data, final byte[] key, final byte[] iv) {
-        byte[] res = null;
-        try {
-            res = process(data, generateCipher(Cipher.ENCRYPT_MODE, key, iv));
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
-        return res;
-    }
-
-    /**
-     * 解密.
-     * @param data
-     *          解密的数据.
-     * @param key
-     *          密钥.
-     * @param iv
-     *          CBC算法所需初始矩阵.
-     * @return 解密结果.
-     */
-    public static byte[] decrypt(final byte[] data, final byte[] key, final byte[] iv) {
-        byte[] res = null;
-        try {
-            res = process(data, generateCipher(Cipher.DECRYPT_MODE, key, iv));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return res;
     }
 
     public static String EncryptMD5(final String s) {

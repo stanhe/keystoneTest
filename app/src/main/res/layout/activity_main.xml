@@ -14,18 +14,21 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
     <EditText
+        android:text="stan"
         android:id="@+id/editText0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="name"
         />
     <EditText
+        android:text="123"
         android:id="@+id/editText1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="password"
         />
         <EditText
+            android:text="login"
         android:id="@+id/editText2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -37,13 +40,16 @@
         android:id="@+id/lledit1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
         <EditText
+            android:text="256"
             android:id="@+id/editText3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="encryptoType"/>
         <EditText
+            android:text="yes"
             android:id="@+id/editText4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

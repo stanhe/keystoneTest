@@ -51,8 +51,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (textView1.getText().equals("")){
-//                    textView1.setText(AESUtils.decryptData(textView.getText().toString()));
-                        textView1.setText(AESUtils.decryptData(textView.getText().toString(), editText3.getText().toString(),editText4.getText().toString()));
+                    textView1.setText(AESUtils.handleCryptData(textView.getText().toString(),AESUtils.DECRYPT));
                 }else {
                     textView1.setText("");
                 }

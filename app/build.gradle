@@ -33,4 +33,5 @@ dependencies {
     compile 'org.xutils:xutils:3.3.36'
     compile 'eu.the4thfloor.volley:com.android.volley:2015.05.28'
     compile 'com.squareup.okhttp:okhttp:2.4.0'
+    compile 'com.scottyab:aescrypt:0.0.1'
 }
