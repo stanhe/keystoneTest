@@ -40,20 +40,13 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (textView.getText().equals(""))
                     getDataOkhttp(url,editText0.getText().toString(),editText1.getText().toString(),editText2.getText().toString());
-                else
-                    textView.setText("");
             }
         });
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (textView1.getText().equals("")){
                     textView1.setText(AESUtils.handleCryptData(textView.getText().toString(),AESUtils.DECRYPT));
-                }else {
-                    textView1.setText("");
-                }
             }
         });
     }
