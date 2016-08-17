@@ -28,6 +28,7 @@ public enum MyOkhttp {
         FormEncodingBuilder builder = new FormEncodingBuilder();
         builder.add("name",name);
         builder.add("password",password);
+        if (!type.equals(""))
         builder.add("type",type);
         final Request request = new Request.Builder().url(url).post(builder.build()).build();
         Call call = mOkHttpClient.newCall(request);

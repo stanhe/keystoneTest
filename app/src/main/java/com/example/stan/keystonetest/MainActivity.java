@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     Button button;
     Button button1;
     String url = "http://192.168.1.11:3000/api";
+    String url1 = "http://192.168.1.11:3000/api/login";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +41,11 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    getDataOkhttp(url,editText0.getText().toString(),editText1.getText().toString(),editText2.getText().toString());
+                if (editText2.getText().toString().trim().equals("")){
+                    getDataOkhttp(url1,editText0.getText().toString(),editText1.getText().toString(),editText2.getText().toString());
+                }else {
+                    getDataOkhttp(url, editText0.getText().toString(), editText1.getText().toString(), editText2.getText().toString());
+                }
             }
         });
         button1.setOnClickListener(new View.OnClickListener() {
