@@ -12,6 +12,9 @@ import com.example.stan.keystonetest.NetWork.NetOkhttp.MyOkhttp;
 import com.example.stan.keystonetest.NetWork.NetVolley.MyVolley;
 import com.example.stan.keystonetest.Utils.AESUtils;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 public class MainActivity extends AppCompatActivity {
     EditText editText0;
@@ -41,11 +44,7 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (editText2.getText().toString().trim().equals("")){
-                    getDataOkhttp(url1,editText0.getText().toString(),editText1.getText().toString(),editText2.getText().toString());
-                }else {
-                    getDataOkhttp(url, editText0.getText().toString(), editText1.getText().toString(), editText2.getText().toString());
-                }
+               postMethodTwo();
             }
         });
         button1.setOnClickListener(new View.OnClickListener() {
@@ -55,6 +54,28 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    private void postMethodOne(){
+        if (editText2.getText().toString().trim().equals("")){
+                    getDataOkhttp(url1,editText0.getText().toString(),editText1.getText().toString(),editText2.getText().toString());
+                }else {
+                    getDataOkhttp(url, editText0.getText().toString(), editText1.getText().toString(), editText2.getText().toString());
+                }
+    }
+
+    private void postMethodTwo(){
+        JSONObject object = new JSONObject();
+        try {
+            object.put("name",editText0.getText().toString());
+            object.put("password",editText1.getText().toString());
+            object.put("type",editText2.getText().toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        postData(url,object.toString());
+    }
+
+
+
     private void getDataVolley(String url,String name,String password ,String type){
         MyVolley.INSTANCE.getString(this, url,name,password,type, new MyVolley.OnResult() {
             @Override
@@ -68,8 +89,36 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
+
     private void getDataOkhttp(String url,String name,String password ,String type){
         MyOkhttp.INSTANCE.getData(url, name, password , type, new MyOkhttp.OnResult() {
+            @Override
+            public void handleResult(final String data) {
+                textView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        textView.setText(data);
+                    }
+                });
+            }
+
+            @Override
+            public void handleError(Exception error) {
+                textView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        textView.setText("");
+                    }
+                });
+            }
+        });
+    }
+
+    private void postData(String url,String data){
+        MyOkhttp.INSTANCE.getData(url, data, new MyOkhttp.OnResult() {
             @Override
             public void handleResult(final String data) {
                 textView.post(new Runnable() {
