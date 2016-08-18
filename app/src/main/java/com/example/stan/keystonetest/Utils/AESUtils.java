@@ -3,6 +3,7 @@ package com.example.stan.keystonetest.Utils;
 import android.util.Base64;
 import android.util.Log;
 import com.scottyab.aescrypt.AESCrypt;
+
 import org.json.JSONObject;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -34,7 +35,12 @@ public class AESUtils {
         }
         return data;
     }
-
+    public static String encryptPostData(String data){
+        String key = String.valueOf(System.currentTimeMillis());
+        String encryptData = encryptData(data,key).trim();
+        encryptData +=","+key;
+        return encryptData.trim();
+    }
     /**
      *
      * @param data the data used for encrypt
@@ -54,7 +60,7 @@ public class AESUtils {
             SecretKeySpec secretKey = new SecretKeySpec(data32.getBytes(),"AES");
             byte[] byteDate = AESCrypt.encrypt(secretKey,data16.getBytes(),cryptedData.getBytes()); //
             data = Base64.encodeToString(byteDate,Base64.DEFAULT);
-
+            data = data.replaceAll("[\\s*\t\n\r]", "");
            /* Log.e("ST","  -------*******-------");
             Log.e("ST","  data16 : "+data16 );
             Log.e("ST","  data32 : "+data32 );
