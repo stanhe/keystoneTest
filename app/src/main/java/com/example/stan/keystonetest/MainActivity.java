@@ -48,11 +48,13 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                postMethodOne();
-//                postMethodTwo(); //encrypt model
-//                postMethodThree();
-//                postMethodFour(); //encrypt req data
-                getDataVolley();
+//                postMethodOne(); //unencrypted * okHttp
+//                postMethodTwo(); //encrypt model *okHttp
+
+//                postMethodThree(); //unencrypted * retrofit
+//                postMethodFour(); //encrypt req data * retrofit -- unrealized
+
+                getDataVolley();    //encrypt req data * volley
             }
         });
         button1.setOnClickListener(new View.OnClickListener() {
