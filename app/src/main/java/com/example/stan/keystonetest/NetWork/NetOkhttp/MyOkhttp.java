@@ -2,6 +2,7 @@ package com.example.stan.keystonetest.NetWork.NetOkhttp;
 
 import android.util.Log;
 
+import com.example.stan.keystonetest.NetWork.OnResult;
 import com.example.stan.keystonetest.Utils.AESUtils;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
@@ -19,10 +20,7 @@ import java.io.IOException;
 public enum MyOkhttp {
     INSTANCE;
     OkHttpClient mOkHttpClient;
-    public interface OnResult{
-        void handleResult(String data);
-        void handleError(Exception error);
-    }
+
     public void getData(String url,String name,String password ,String type, final OnResult result){
         if (mOkHttpClient==null)
             mOkHttpClient = new OkHttpClient();
@@ -48,6 +46,12 @@ public enum MyOkhttp {
         });
     }
 
+    /**
+     *  加密模式~
+     * @param url
+     * @param data
+     * @param result
+     */
     public void getData(String url, String data, final OnResult result){
         if (mOkHttpClient == null)
             mOkHttpClient = new OkHttpClient();

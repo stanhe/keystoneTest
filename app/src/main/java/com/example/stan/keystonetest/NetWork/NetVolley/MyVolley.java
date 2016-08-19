@@ -10,6 +10,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.stan.keystonetest.NetWork.OnResult;
+import com.example.stan.keystonetest.Utils.AESUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,11 +23,7 @@ import java.util.Map;
 public enum  MyVolley {
     INSTANCE;
     static RequestQueue mQueue;
-    public interface OnResult{
-       void handleResult(String data);
-        void handleError(VolleyError error);
-    }
-    public void getString(Context context, String url, final String name, final String password, final String type, final OnResult result){
+    public void getString(Context context, String url, final String data, final OnResult result){
         if (mQueue==null)
             mQueue = Volley.newRequestQueue(context.getApplicationContext());
         StringRequest stringRequest = new StringRequest(Request.Method.POST,url,
@@ -45,9 +43,8 @@ public enum  MyVolley {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> map = new HashMap<>();
-                map.put("name",name);
-                map.put("password",password);
-                map.put("type",type);
+                String result = AESUtils.encryptPostData(data); //encrypt req data
+                map.put("data",result);
                 return map;
             }
         };

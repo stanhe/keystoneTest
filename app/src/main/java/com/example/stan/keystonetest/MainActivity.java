@@ -2,15 +2,19 @@ package com.example.stan.keystonetest;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.android.volley.VolleyError;
+import com.example.stan.keystonetest.NetWork.MyRetrofit.RetrofitApis;
 import com.example.stan.keystonetest.NetWork.NetOkhttp.MyOkhttp;
 import com.example.stan.keystonetest.NetWork.NetVolley.MyVolley;
+import com.example.stan.keystonetest.NetWork.OnResult;
 import com.example.stan.keystonetest.Utils.AESUtils;
+import com.example.stan.keystonetest.model.User;
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,7 +48,11 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               postMethodTwo();
+//                postMethodOne();
+//                postMethodTwo(); //encrypt model
+//                postMethodThree();
+//                postMethodFour(); //encrypt req data
+                getDataVolley();
             }
         });
         button1.setOnClickListener(new View.OnClickListener() {
@@ -74,71 +82,61 @@ public class MainActivity extends AppCompatActivity {
         postData(url,object.toString());
     }
 
+    private void postMethodThree(){
+        User user = new User(editText0.getText().toString(),editText1.getText().toString(),editText2.getText().toString());
+        RetrofitApis.login(user);
+    }
 
+    private void postMethodFour(){
+        User user = new User(editText0.getText().toString(),editText1.getText().toString(),editText2.getText().toString());
+        Gson gson = new Gson();
+        String data = gson.toJson(user,User.class);
+        Log.e("ST","data-----: "+data);
+        Log.e("ST","-----data---- : "+AESUtils.encryptPostData(data));
+        RetrofitApis.login(data,myResult);
+    }
 
-    private void getDataVolley(String url,String name,String password ,String type){
-        MyVolley.INSTANCE.getString(this, url,name,password,type, new MyVolley.OnResult() {
-            @Override
-            public void handleResult(String data) {
-                textView.setText(data);
-            }
-
-            @Override
-            public void handleError(VolleyError error) {
-                textView.setText("error");
-            }
-        });
+    private void getDataVolley(){
+        JSONObject object = new JSONObject();
+        try {
+            object.put("name",editText0.getText().toString());
+            object.put("password",editText1.getText().toString());
+            object.put("type",editText2.getText().toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        MyVolley.INSTANCE.getString(this, url,object.toString(), myResult);
     }
 
 
 
 
     private void getDataOkhttp(String url,String name,String password ,String type){
-        MyOkhttp.INSTANCE.getData(url, name, password , type, new MyOkhttp.OnResult() {
-            @Override
-            public void handleResult(final String data) {
-                textView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        textView.setText(data);
-                    }
-                });
-            }
-
-            @Override
-            public void handleError(Exception error) {
-                textView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        textView.setText("");
-                    }
-                });
-            }
-        });
+        MyOkhttp.INSTANCE.getData(url, name, password , type, myResult);
     }
 
     private void postData(String url,String data){
-        MyOkhttp.INSTANCE.getData(url, data, new MyOkhttp.OnResult() {
-            @Override
-            public void handleResult(final String data) {
-                textView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        textView.setText(data);
-                    }
-                });
-            }
-
-            @Override
-            public void handleError(Exception error) {
-                textView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        textView.setText("");
-                    }
-                });
-            }
-        });
+        MyOkhttp.INSTANCE.getData(url, data, myResult);
     }
+    OnResult myResult = new OnResult() {
+        @Override
+        public void handleResult(final String data) {
+            textView.post(new Runnable() {
+                @Override
+                public void run() {
+                    textView.setText(data);
+                }
+            });
+        }
 
+        @Override
+        public void handleError(Exception error) {
+            textView.post(new Runnable() {
+                @Override
+                public void run() {
+                    textView.setText("");
+                }
+            });
+        }
+    };
 }
