@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 //                postMethodThree(); //unencrypted * retrofit
 //                postMethodFour(); //encrypt req data * retrofit -- unrealized
 
-                getDataVolley();    //encrypt req data * volley
+                 getDataVolley();    //encrypt req data * volley
             }
         });
         button1.setOnClickListener(new View.OnClickListener() {
