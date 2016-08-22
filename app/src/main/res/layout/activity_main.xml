@@ -77,6 +77,12 @@
         android:textSize="12sp"
         android:id="@+id/text1" />
     <Button
+        android:text="tokenRequest"
+        android:id="@+id/button0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
+    <Button
         android:text="getData"
         android:id="@+id/button"
         android:layout_width="wrap_content"

@@ -2,11 +2,13 @@ package com.example.stan.keystonetest;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.stan.keystonetest.NetWork.MyRetrofit.RetrofitApis;
 import com.example.stan.keystonetest.NetWork.NetOkhttp.MyOkhttp;
@@ -31,8 +33,10 @@ public class MainActivity extends AppCompatActivity {
     TextView textView1;
     Button button;
     Button button1;
+    Button button0;
     String url = "http://192.168.1.11:3000/api";
     String url1 = "http://192.168.1.11:3000/api/login";
+    private static String token;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,16 +50,17 @@ public class MainActivity extends AppCompatActivity {
         editText4 = (EditText) findViewById(R.id.editText4);
         button = (Button) findViewById(R.id.button);
         button1 = (Button) findViewById(R.id.button1);
+        button0 = (Button) findViewById(R.id.button0);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                postMethodOne(); //unencrypted * okHttp
-//                postMethodTwo(); //encrypt model *okHttp
+                postMethodTwo(); //encrypt model *okHttp
 
 //                postMethodThree(); //unencrypted * retrofit
 //                postMethodFour(); //encrypt req data * retrofit -- unrealized
 
-                 getDataVolley();    //encrypt req data * volley
+//                getDataVolley();    //encrypt req data * volley
             }
         });
         button1.setOnClickListener(new View.OnClickListener() {
@@ -64,7 +69,20 @@ public class MainActivity extends AppCompatActivity {
                     textView1.setText(AESUtils.handleCryptData(textView.getText().toString(),AESUtils.DECRYPT));
             }
         });
+
+        button0.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (TextUtils.isEmpty(token)){
+                    Toast.makeText(MainActivity.this, "Token is null", Toast.LENGTH_SHORT).show();
+                }else {
+                    Log.e("ST","token :"+token);
+                    postOkhttpWithToken();
+                }
+            }
+        });
     }
+
     private void postMethodOne(){
         if (editText2.getText().toString().trim().equals("")){
                     getDataOkhttp(url1,editText0.getText().toString(),editText1.getText().toString(),editText2.getText().toString());
@@ -84,6 +102,17 @@ public class MainActivity extends AppCompatActivity {
         }
         postData(url,object.toString());
     }
+    private void postOkhttpWithToken(){
+        JSONObject object = new JSONObject();
+        try {
+            object.put("token",token);
+            object.put("type","getMessage");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        postData(url,object.toString());
+    }
+
 
     private void postMethodThree(){
         User user = new User(editText0.getText().toString(),editText1.getText().toString(),editText2.getText().toString());
@@ -110,7 +139,16 @@ public class MainActivity extends AppCompatActivity {
         }
         MyVolley.INSTANCE.getString(this, url,object.toString(), myResult);
     }
-
+    private void postVolleyWithToken(){
+        JSONObject object = new JSONObject();
+        try {
+            object.put("token",token);
+            object.put("type","getMessage");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        MyVolley.INSTANCE.getString(this, url,object.toString(), myResult);
+    }
 
 
 
@@ -128,13 +166,14 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     textView.setText(data);
-                    Gson gson = new Gson();
-                    LoginResponse response = gson.fromJson(AESUtils.handleCryptData(data,AESUtils.DECRYPT),LoginResponse.class);
-                    Log.e("ST","response_status "+response.status );
-                    Log.e("ST","response_message "+response.message );
-                    Log.e("ST","response_name "+response.data.playerName );
-                    Log.e("ST","response_level "+response.data.playerLevel );
-                    Log.e("ST","response_token "+response.data.token );
+                    try {
+                        Gson gson = new Gson();
+                        LoginResponse response = gson.fromJson(AESUtils.handleCryptData(data, AESUtils.DECRYPT), LoginResponse.class);
+                        token = response.data.token;
+                        Log.e("ST", "response_token " + response.data.token);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
             });
         }
