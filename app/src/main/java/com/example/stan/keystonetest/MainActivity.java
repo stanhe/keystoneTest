@@ -13,6 +13,7 @@ import com.example.stan.keystonetest.NetWork.NetOkhttp.MyOkhttp;
 import com.example.stan.keystonetest.NetWork.NetVolley.MyVolley;
 import com.example.stan.keystonetest.NetWork.OnResult;
 import com.example.stan.keystonetest.Utils.AESUtils;
+import com.example.stan.keystonetest.model.LoginResponse;
 import com.example.stan.keystonetest.model.User;
 import com.google.gson.Gson;
 
@@ -94,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         Gson gson = new Gson();
         String data = gson.toJson(user,User.class);
         Log.e("ST","data-----: "+data);
-        Log.e("ST","-----data---- : "+AESUtils.encryptPostData(data));
+        Log.e("ST","-----data---- : "+AESUtils.handleCryptData(data,AESUtils.ENCRYPT));
         RetrofitApis.login(data,myResult);
     }
 
@@ -127,6 +128,13 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     textView.setText(data);
+                    Gson gson = new Gson();
+                    LoginResponse response = gson.fromJson(AESUtils.handleCryptData(data,AESUtils.DECRYPT),LoginResponse.class);
+                    Log.e("ST","response_status "+response.status );
+                    Log.e("ST","response_message "+response.message );
+                    Log.e("ST","response_name "+response.data.playerName );
+                    Log.e("ST","response_level "+response.data.playerLevel );
+//                    Log.e("ST","response_token "+response.data.token );
                 }
             });
         }

@@ -56,7 +56,7 @@ public enum MyOkhttp {
         if (mOkHttpClient == null)
             mOkHttpClient = new OkHttpClient();
         FormEncodingBuilder builder = new FormEncodingBuilder();
-        data = AESUtils.encryptPostData(data);
+        data = AESUtils.handleCryptData(data,AESUtils.ENCRYPT);
         Log.e("ST","postData : "+data);
         builder.add("data",data);
         Request request = new Request.Builder().url(url).post(builder.build()).build();

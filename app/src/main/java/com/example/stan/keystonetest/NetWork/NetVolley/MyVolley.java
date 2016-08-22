@@ -43,7 +43,7 @@ public enum  MyVolley {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> map = new HashMap<>();
-                String result = AESUtils.encryptPostData(data); //encrypt req data
+                String result = AESUtils.handleCryptData(data,AESUtils.ENCRYPT); //encrypt req data
                 map.put("data",result);
                 return map;
             }
