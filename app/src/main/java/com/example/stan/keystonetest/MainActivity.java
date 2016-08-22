@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.e("ST","response_message "+response.message );
                     Log.e("ST","response_name "+response.data.playerName );
                     Log.e("ST","response_level "+response.data.playerLevel );
-//                    Log.e("ST","response_token "+response.data.token );
+                    Log.e("ST","response_token "+response.data.token );
                 }
             });
         }
