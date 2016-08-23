@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     Button button;
     Button button1;
     Button button0;
+    Button button2;
     String url = "http://192.168.1.11:3000/api";
     String url1 = "http://192.168.1.11:3000/api/login";
     private static String token;
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         button = (Button) findViewById(R.id.button);
         button1 = (Button) findViewById(R.id.button1);
         button0 = (Button) findViewById(R.id.button0);
+        button2 = (Button) findViewById(R.id.button2);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,6 +81,12 @@ public class MainActivity extends AppCompatActivity {
                     Log.e("ST","token :"+token);
                     postOkhttpWithToken();
                 }
+            }
+        });
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                throw new RuntimeException("This is a crash");
             }
         });
     }
