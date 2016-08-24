@@ -114,7 +114,9 @@ public class MainActivity extends AppCompatActivity {
         JSONObject object = new JSONObject();
         try {
             object.put("token",token);
-            object.put("type","getMessage");
+            object.put("type","actions");
+            object.put("actionsType","getGold");
+            object.put("actionsNo",1);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -151,7 +153,9 @@ public class MainActivity extends AppCompatActivity {
         JSONObject object = new JSONObject();
         try {
             object.put("token",token);
-            object.put("type","getMessage");
+            object.put("type","actions");
+            object.put("actionsType","levelUp");
+            object.put("actionsNo",3);
         } catch (JSONException e) {
             e.printStackTrace();
         }
