@@ -13,4 +13,4 @@ this is a android app used the keystoneTest_server as server
 
 
 ### [BackGround](https://github.com/stanhe/keystoneTest_server)
-background for this app.
+server for this app.
