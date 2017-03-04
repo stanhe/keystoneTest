@@ -10,3 +10,7 @@ this is a android app used the keystoneTest_server as server
 
 ### Effect
 ![stan](http://oanvj2lsv.bkt.clouddn.com/keystoneTest.png)
+
+
+### [BackGround](https://github.com/stanhe/keystoneTest_server)
+background for this app.
